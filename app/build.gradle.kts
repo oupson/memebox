@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "fr.oupson.memebox"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "fr.oupson.memebox"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -50,11 +50,13 @@ android {
 }
 
 dependencies {
+    val activity_version = "1.8.0-alpha07"
     val room_version = "2.5.2"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.activity:activity-compose:$activity_version")
+    implementation("androidx.activity:activity-ktx:$activity_version")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
