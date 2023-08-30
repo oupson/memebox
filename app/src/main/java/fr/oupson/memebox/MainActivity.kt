@@ -12,8 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import fr.oupson.memebox.ui.ImageViewModel
+import fr.oupson.memebox.ui.screen.AddImageScreen
 import fr.oupson.memebox.ui.screen.AppScreen
 import fr.oupson.memebox.ui.theme.MemeBoxTheme
 
@@ -43,8 +49,33 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
 
+            val navController = rememberNavController()
             MemeBoxTheme {
-                AppScreen()
+                NavHost(navController = navController, startDestination = "image_list") {
+                    composable("image_list") {
+                        AppScreen(imageViewModel, onAddNavigate = {
+                            navController.navigate(
+                                "add_image/${
+                                    it
+                                }"
+                            )
+                        })
+                    }
+                    composable(
+                        "add_image/{tempImageId}",
+                        arguments = listOf(navArgument("tempImageId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        val tempImageId = backStackEntry.arguments?.getLong("tempImageId")!! // TODO
+                        AddImageScreen(tempImageId, imageViewModel, onAddedImage = { imageId ->
+
+                        })
+                    }
+                    composable(
+                        "image/{imageId}", arguments = listOf(navArgument("imageId") { type = NavType.LongType })
+                    ) {
+
+                    }
+                }
             }
         }
     }
@@ -52,9 +83,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!", modifier = modifier
-    )
+    Text(text = "Hello $name!", modifier = modifier)
 }
 
 @Preview(showBackground = true)
